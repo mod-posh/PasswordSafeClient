@@ -8,63 +8,47 @@ on:
     branches:
       - main
 
-# Define the project name as an anchor
-x-project-name: &project-name PasswordSafeClient
-
 jobs:
   build_and_test:
     runs-on: windows-latest
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '7.0.x'
-
-    - name: Restore dependencies
-      run: dotnet restore ${{ github.workspace }}/*project-name*/&project-name.sln
-
-    - name: Clean
-      run: dotnet clean ${{ github.workspace }}/*project-name*/&project-name.sln --configuration Release
-
-    - name: Build
-      run: dotnet build ${{ github.workspace }}/*project-name*/&project-name.sln --configuration Release --no-restore
-
-    - name: Test
-      run: dotnet test ${{ github.workspace }}/*project-name*/&project-name.sln --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
-
-    - name: Publish Test Results
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: Test Results
-        path: '**/TestResults/*.trx'
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '7.0.x'
+      - name: Restore dependencies
+        run: dotnet restore ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln
+      - name: Clean
+        run: dotnet clean ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release
+      - name: Build
+        run: dotnet build ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --no-restore
+      - name: Test
+        run: dotnet test ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
+      - name: Publish Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test Results
+          path: '**/TestResults/*.trx'
 
   pack_and_publish:
     needs: build_and_test
     if: success()
     runs-on: windows-latest
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '7.0.x'
-
-    - name: Restore dependencies
-      run: dotnet restore ${{ github.workspace }}/*project-name*/&project-name.sln
-
-    - name: Build
-      run: dotnet build ${{ github.workspace }}/*project-name*/&project-name.sln --configuration Release --no-restore
-
-    - name: Package
-      run: dotnet pack ${{ github.workspace }}/*project-name*/&project-name.sln --configuration Release --output nupkgs
-
-    - name: Publish NuGet Package
-      run: |
-        nuget push **/*.nupkg -ApiKey ${{secrets.NUGET_API_KEY}} -Source https://api.nuget.org/v3/index.json
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '7.0.x'
+      - name: Restore dependencies
+        run: dotnet restore ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln
+      - name: Build
+        run: dotnet build ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --no-restore
+      - name: Package
+        run: dotnet pack ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --output nupkgs
+      - name: Publish NuGet Package
+        run: |
+          nuget push **/*.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
