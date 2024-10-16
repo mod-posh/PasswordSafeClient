@@ -1,8 +1,8 @@
-# Contributing to [Your Project Name]
+# Contributing to PasswordSafeClient
 
 ## Introduction
 
-Thank you for your interest in contributing to [Your Project Name]! We value the contributions from the community and are glad that you're interested in helping improve this project. This document outlines the guidelines for contributing, which help maintain the project's quality and keep the process efficient and respectful.
+Thank you for your interest in contributing to PasswordSafeClient! We value the contributions from the community and are glad that you're interested in helping improve this project. This document outlines the guidelines for contributing, which help maintain the project's quality and keep the process efficient and respectful.
 
 ## How to Contribute
 
