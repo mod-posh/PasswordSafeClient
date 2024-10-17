@@ -55,6 +55,7 @@ jobs:
               Write-Host "Key starts with: $($apiKey.Substring(0, 4))"
           } else {
               Write-Host "Key is too short."
+          }
         shell: pwsh
       - name: Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
