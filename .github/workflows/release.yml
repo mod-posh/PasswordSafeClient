@@ -67,25 +67,29 @@ jobs:
       - name: Run Inline PowerShell Commands
         run: |
           pwsh -command "
-            $Project = [xml](Get-Content -Path "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}");
+            $ProjectName = "${{ vars.PROJECT_NAME }}"
+            $RootPath = "${{ github.workspace }}"
+            $GithubOwner = "${{ github.repository_owner }}"
+            $GithubRepo = "${{ github.repository }}"
+
+            $Project = [xml](Get-Content -Path "$($RootPath)/$($ProjectName)/$($ProjectName)");
             $PackageId = $Project.Project.PropertyGroup.PackageId;
-            Write-Host "PackageId: $($PackageId)"
-            $readMe = Get-Item -Path "${{ github.workspace }}\README.md"
+            $readMe = Get-Item -Path "$($RootPath)\README.md"
 
             $TableHeaders = "| Latest Version | Nuget.org | Issues | License | Discord |"
             $Columns = "|-----------------|----------------|----------------|----------------|----------------|"
-            $VersionBadge = "[![Latest Version](https://img.shields.io/github/v/tag/${{ github.repository_owner }}/${{ vars.PROJECT_NAME }})](${{ github.repository }}/${{ vars.PROJECT_NAME }}/tags)"
+            $VersionBadge = "[![Latest Version](https://img.shields.io/github/v/tag/$($GithubOwner)/$($ProjectName))]($($GithubRepo)/$($ProjectName)/tags)"
             $GalleryBadge = "[![Nuget.org](https://img.shields.io/nuget/dt/$($PackageId))](https://www.nuget.org/packages/$($PackageId))"
-            $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/${{ github.repository_owner }}/${{ vars.PROJECT_NAME }})](${{ github.repository }}/${{ vars.PROJECT_NAME }}/issues)"
-            $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/${{ github.repository_owner }}/${{ vars.PROJECT_NAME }})](${{ github.repository }}/${{ vars.PROJECT_NAME }}/blob/master/LICENSE)"
+            $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/$($GithubOwner)/$($ProjectName))]($($GithubRepo)/$($ProjectName)/issues)"
+            $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/$($GithubOwner)/$($ProjectName))]($($GithubRepo)/$($ProjectName)/blob/master/LICENSE)"
             $DiscordBadge = "[![Discord Server](https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b5493894cf60b300587_full_logo_white_RGB.svg)](https://discord.com/channels/1044305359021555793/1044305781627035811)"
 
             Write-Output $TableHeaders | Out-File $readMe.FullName -Force
             Write-Output $Columns | Out-File $readMe.FullName -Append
             Write-Output "| $($VersionBadge) | $($GalleryBadge) | $($IssueBadge) | $($LicenseBadge) | $($DiscordBadge) |" | Out-File $readMe.FullName -Append
 
-            Get-Content -Path "$($script:Root)\${{ vars.PROJECT_NAME }}.md" |Out-File -FilePath $readMe.FullName -Append
-            "
+            Get-Content -Path "$($script:Root)\$($ProjectName).md" |Out-File -FilePath $readMe.FullName -Append
+          "
 
       - name: Commit Documentation Changes
         run: |
