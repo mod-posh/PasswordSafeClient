@@ -54,8 +54,8 @@ jobs:
           curl -L https://dist.nuget.org/win-x86-commandline/latest/nuget.exe --output nuget.exe
       - name: Validate NuGet Package
         run: |
-          ./nuget.exe 
-
+          ./nuget.exe config
+          ./nuget.exe setapikey "${{ secrets.NUGET_API_KEY }}"  -verbosity quiet
       - name: Publish NuGet Package
-        run: dotnet nuget push **/*.nupkg --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: nuget push .\nupkgs\*.nupkg
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
