@@ -59,10 +59,8 @@ jobs:
           verbose: true
 
       - name: Generate Documentation
-        shell: pwsh
         run: |
-          $Filename = (Get-Childitem -Recurse -Filter "${{ vars.PROJECT_NAME }}.dll" | Select-Object -First 1).FullNam
-          xmldocmd $Filename Docs --visibility private --clean --namespace ${{ vars.PROJECT_NAMESPACE }} --namespace-pages
+          xmldocmd ./publish/${{ vars.PROJECT_NAME }}.dll Docs --visibility private --clean --namespace ${{ vars.PROJECT_NAMESPACE }} --namespace-pages
         env:
           PATH: ${{ github.runner.tool_cache }}/.dotnet/tools:$PATH:~/.dotnet/tools
 
