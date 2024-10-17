@@ -69,6 +69,7 @@ jobs:
           pwsh -command "
             $Project = [xml](Get-Content -Path "${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}");
             $PackageId = $Project.Project.PropertyGroup.PackageId;
+            Write-Host "PackageId: $($PackageId)"
             $readMe = Get-Item -Path "${{ github.workspace }}\README.md"
 
             $TableHeaders = "| Latest Version | Nuget.org | Issues | License | Discord |"
