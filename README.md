@@ -1,71 +1,116 @@
-# C# Project
+| Latest Version | Nuget.org | Issues | License | Discord |
+|-----------------|----------------|----------------|----------------|----------------|
+| [![Latest Version](https://img.shields.io/github/v/tag/mod-posh/PasswordSafeClient)](https://github.com/mod-posh/PasswordSafeClient/tags) | [![Nuget.org](https://img.shields.io/nuget/dt/)](https://www.nuget.org/packages/) | [![GitHub issues](https://img.shields.io/github/issues/mod-posh/PasswordSafeClient)](https://github.com/mod-posh/PasswordSafeClient/issues) | [![GitHub license](https://img.shields.io/github/license/mod-posh/PasswordSafeClient)](https://github.com/mod-posh/PasswordSafeClient/blob/master/LICENSE) | [![Discord Server](https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b5493894cf60b300587_full_logo_white_RGB.svg)](https://discord.com/channels/1044305359021555793/1044305781627035811) |
+# ModPosh.PasswordSafeClient
 
-Enclosed are the files I use to build and deploy C# Projects. The basic file structure is included so you know what it should look like. Several Modules are required, and the Tasks will check for them at the start.
+ModPosh.PasswordSafeClient is a C# client library for interacting with the PasswordSafe API. It allows developers to manage credentials within projects by providing a simple and flexible API interface. This client supports basic operations such as retrieving, creating, updating, and deleting credentials, and it uses an authentication token to securely communicate with the API.
 
-## Dependencies
+## Features
 
-You will need to have the following modules installed:
+- Retrieve all credentials for a project.
+- Retrieve a specific credential by its ID.
+- Create new credentials.
+- Update existing credentials.
+- Delete credentials from a project.
+- Supports token-based authentication (`X-Auth-Token`).
 
- 1. PowerShellForGitHub : This is used for the ReleaseNotes task.
- 2. DefaultDocumentation: This is used to generate code documentation from comments.
+## Installation
 
-Please see the [psakefile](psakefile.ps1) for the versions currently used.
+You can install **ModPosh.PasswordSafeClient** via NuGet:
 
-## Supporting Files
+```bash
+dotnet add package ModPosh.PasswordSafeClient
+```
 
-There are several files used to help authenticate to various services, and depending on your needs, you may not need them or need something different. You can use them as is, but you must populate the various tokens and keys yourself. Also, you can use them as a template if you need nothing.
+Or by adding it to your `csproj` file:
 
-### ado.json
+```xml
+<PackageReference Include="ModPosh.PasswordSafeClient" Version="1.0.0" />
+```
 
-This file is used to authenticate into the Azure DevOps Rest API, and you will need a token for this, so please consult the [Documentation](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=Windows). I include three items:
+---
 
-1. Orgname    : The name of the Azure DevOps organization.
-2. Token      : The PAT Token.
-3. Expiration : The expiration date.
+## Usage in C# Project
 
-I include the Expiration so I can get a visual indication of how long before I need to renew the token; there is logic within the psakefile to display that out when you run it.
+### 1. Initialize the Client
 
-### discord.json
+You need to pass an `HttpClient` and an authentication token (`X-Auth-Token`) to create an instance of the `PasswordSafeClient`.
 
-This file is used to post a message to Discord. I have a server that I set up, and I post updates to channels for each module I use. If you wish to use the Post2Discord task, you must have a Discord account, set up a personal server, and get the webhook URL; please consult the [Documentation](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
+#### Example
 
-### github.json
+```csharp
+using ModPosh.PasswordSafeClient;
+using ModPosh.PasswordSafeClient.Factory;
+using System.Net.Http;
 
-This file is used to authenticate into the GitHub API; you must set up a token for this, so please consult the [Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). This file is also used for the ReleaseNotes task.
+var httpClient = new HttpClient { BaseAddress = new Uri("https://pwdsafe.rackspace.net") };
+httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-### blueksy.json
+string authToken = "your-auth-token";  // Replace with a valid token
+var passwordSafeClient = PasswordSafeClientFactory.Create(httpClient, authToken);
 
-This file is used to authenticate into the Bluesky Social Media platform. You must set up a token for this, so please consult the [Documentation](https://github.com/bluesky-social/atproto-ecosystem/blob/main/app-passwords.md).
+// Example usage: Retrieve a specific credential
+int projectId = 30795;
+int credentialId = 320223;
 
-### nuget.config
+var credential = await passwordSafeClient.CredentialsService.GetCredentialAsync(projectId, credentialId);
+Console.WriteLine($"Credential Description: {credential.Description}");
+```
 
-This file is initially set up to publish to nuget.org and the PowerShell Gallery. You must create an API Key for this. Please consult the [Documentation](https://learn.microsoft.com/en-us/powershell/scripting/gallery/concepts/publishing-guidelines?view=powershell-7.3).
+---
 
-> [!Caution]
-> You will want to add ado.json, discord.json, github.json, bluesky.json to your .gitignore before any commits
-> those files contain sensitive information such as passwords and credentials, they are provided here to give
-> you a place to start
+## Usage via PowerShell
 
-## PsakeFile
+You can also use **ModPosh.PasswordSafeClient** in PowerShell by importing it into your script.
 
-This is the main file from which all automation is kicked off. I will go through the basic usage of this file, but for details on setting it up for your use, please refer to the file itself. The Psakefile contains a collection of Tasks. For more information on setting up and using Psake, please consult the [Documentation](https://psake.readthedocs.io/en/latest/). I will cover the basic tasks that I use so you have an understanding of how they work.
+### 1. Load the Assembly
 
-### Localuse
+```powershell
+Add-Type -Path "path\to\ModPosh.PasswordSafeClient.dll"
+```
 
-This task is run regularly, compiling the module after local changes so I can test functionality. It runs a Build but does not do any testing that would typically accompany it.
+### 2. Set up the `HttpClient` and Token
 
-### Build
+```powershell
+# Create an instance of HttpClient
+$httpClient = [System.Net.Http.HttpClient]::new()
+$httpClient.BaseAddress = [Uri]::new("https://pwdsafe.rackspace.net")
+$httpClient.DefaultRequestHeaders.Add("Accept", "application/json")
 
-This task runs the LocalUse and TestProject tasks, so make sure you have some of those; otherwise, remove the reference to the TestProject Task. For more information on setting up Tests, please refer to the [Documentation](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-nunit).
+# Set your authentication token
+$authToken = "your-auth-token"  # Replace with the actual token
 
-### Package
+# Create the PasswordSafeClient
+$passwordSafeClient = [ModPosh.PasswordSafeClient.Factory.PasswordSafeClientFactory]::Create($httpClient, $authToken)
 
-This task builds the help files, packages them up for deployment, and updates the README.
+# Set the project and credential IDs
+$projectId = 30795  # Replace with your project ID
+$credentialId = 320223  # Replace with your credential ID
 
-### Deploy
+# Retrieve the credential
+$credential = $passwordSafeClient.CredentialsService.GetCredentialAsync($projectId, $credentialId).GetAwaiter().GetResult()
 
-This task will check to make sure we have checked out the Deployment Branch, and the deployment should fail if we are not in the deployment branch. It will then create the Release Notes, compiled from the GitHub Milestones; if you are not using them, remove the reference to this task. It will then Publish the project to nuget.org, create and push a Tagged release, and create the GitHub Release.
+# Output the credential information
+$credential | ConvertTo-Json -Depth 5
+```
 
-### Notifications
+---
 
-This task will post updates to any notification channels you have set up; Post2Discord and Post2BlueSky are the defaults.
+## Implemented Services
+
+### CredentialsService
+
+- `Task<List<Credential>> GetAllCredentialsAsync(int projectId)`
+  - Retrieves all credentials for a specific project.
+
+- `Task<Credential> GetCredentialAsync(int projectId, int credentialId)`
+  - Retrieves a specific credential by its ID.
+
+- `Task<Credential> CreateCredentialAsync(int projectId, CredentialRequest credentialRequest)`
+  - Creates a new credential for the project.
+
+- `Task UpdateCredentialAsync(int projectId, int credentialId, CredentialRequest credentialRequest)`
+  - Updates an existing credential.
+
+- `Task DeleteCredentialAsync(int projectId, int credentialId)`
+  - Deletes a credential from the project.
