@@ -50,5 +50,5 @@ jobs:
         run: dotnet pack ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --output nupkgs
       - name: Publish NuGet Package
         run: |
-          nuget push **/*.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+          nuget push **/*.nupkg -ApiKey "${{ secrets.NUGET_API_KEY }}" -Source https://api.nuget.org/v3/index.json
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
