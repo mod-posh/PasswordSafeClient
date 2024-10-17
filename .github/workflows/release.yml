@@ -74,12 +74,13 @@ jobs:
 
             $Project = [xml](Get-Content -Path "$($RootPath)/$($ProjectName)/$($ProjectName)");
             $PackageId = $Project.Project.PropertyGroup.PackageId;
+            Write-Host "PAckageId: $($PackageId)"
             $readMe = Get-Item -Path "$($RootPath)\README.md"
 
             $TableHeaders = "| Latest Version | Nuget.org | Issues | License | Discord |"
             $Columns = "|-----------------|----------------|----------------|----------------|----------------|"
             $VersionBadge = "[![Latest Version](https://img.shields.io/github/v/tag/$($GithubOwner)/$($ProjectName))]($($GithubRepo)/$($ProjectName)/tags)"
-            $GalleryBadge = "[![Nuget.org](https://img.shields.io/nuget/dt/$($PackageId))](https://www.nuget.org/packages/$($PackageId))"
+            #$GalleryBadge = "[![Nuget.org](https://img.shields.io/nuget/dt/$($PackageId))](https://www.nuget.org/packages/$($PackageId))"
             $IssueBadge = "[![GitHub issues](https://img.shields.io/github/issues/$($GithubOwner)/$($ProjectName))]($($GithubRepo)/$($ProjectName)/issues)"
             $LicenseBadge = "[![GitHub license](https://img.shields.io/github/license/$($GithubOwner)/$($ProjectName))]($($GithubRepo)/$($ProjectName)/blob/master/LICENSE)"
             $DiscordBadge = "[![Discord Server](https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0b5493894cf60b300587_full_logo_white_RGB.svg)](https://discord.com/channels/1044305359021555793/1044305781627035811)"
