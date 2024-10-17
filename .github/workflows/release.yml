@@ -23,7 +23,7 @@ jobs:
         with:
           milestone_number: ${{ github.event.milestone.number }}
           verbose: 'verbose'
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull Latest Changes
         run: git pull origin ${{ github.ref_name }}
@@ -36,7 +36,7 @@ jobs:
           filename: 'RELEASE.md'
           version: ${{ env.VERSION }}
           verbose: 'verbose'
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install PowerShell
         run: |
