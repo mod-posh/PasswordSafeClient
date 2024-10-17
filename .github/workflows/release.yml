@@ -60,7 +60,7 @@ jobs:
 
       - name: Generate Documentation
         run: |
-          xmldocmd ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/publish/${{ vars.PROJECT_NAME }}.dll Docs --visibility private --clean --namespace ${{ vars.PROJECT_NAMESPACE }} --namespace-pages
+          xmldocmd /${{ github.workspace }}/publish/${{ vars.PROJECT_NAME }}.dll Docs --visibility private --clean --namespace ${{ vars.PROJECT_NAMESPACE }} --namespace-pages
         env:
           PATH: ${{ github.runner.tool_cache }}/.dotnet/tools:$PATH:~/.dotnet/tools
 
