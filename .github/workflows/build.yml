@@ -57,5 +57,5 @@ jobs:
           ./nuget.exe config
           ./nuget.exe setapikey "${{ secrets.NUGET_API_KEY }}"  -verbosity quiet
       - name: Publish NuGet Package
-      run: nuget push .\nupkgs\*.nupkg
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: nuget push .\nupkgs\*.nupkg
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
