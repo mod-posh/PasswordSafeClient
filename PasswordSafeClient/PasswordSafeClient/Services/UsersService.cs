@@ -45,7 +45,6 @@ namespace ModPosh.PasswordSafeClient.Services
             response.EnsureSuccessStatusCode();
 
             var rawJson = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Raw JSON Response: {rawJson}");
 
             // Deserialize to a list of UserWrapper objects
             var userWrappers = JsonSerializer.Deserialize<List<UserWrapper>>(rawJson, new JsonSerializerOptions
