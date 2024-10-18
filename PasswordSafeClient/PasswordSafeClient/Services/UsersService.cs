@@ -44,7 +44,21 @@ namespace ModPosh.PasswordSafeClient.Services
             var response = await _httpClient.GetAsync($"/projects/{projectId}/users");
             response.EnsureSuccessStatusCode();
 
-            var users = await response.Content.ReadFromJsonAsync<List<User>>();
+            var rawJson = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Raw JSON Response: {rawJson}");
+
+            // Deserialize to a list of UserWrapper objects
+            var userWrappers = JsonSerializer.Deserialize<List<UserWrapper>>(rawJson, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            // Filter out null users and select non-null User objects
+            var users = userWrappers?
+                .Where(wrapper => wrapper.User != null)  // Filter out null User objects
+                .Select(wrapper => wrapper.User!)
+                .ToList();
+
             return users ?? new List<User>();
         }
 
