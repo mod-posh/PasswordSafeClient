@@ -11,6 +11,9 @@ namespace ModPosh.PasswordSafeClient.Client
         /// <inheritdoc />
         public ICredentialsService CredentialsService { get; }
 
+        /// <inheritdoc />
+        public IUserService UsersService { get; }
+
         private string _authToken;
 
         /// <summary>
@@ -24,6 +27,7 @@ namespace ModPosh.PasswordSafeClient.Client
 
             // Pass the token into CredentialsService
             CredentialsService = new CredentialsService(httpClient, _authToken);
+            UsersService = new UsersService(httpClient, _authToken);
         }
 
         /// <summary>
