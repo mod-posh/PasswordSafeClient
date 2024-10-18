@@ -14,10 +14,13 @@ Added:
   - Models
     - User
     - UserRequest
+    - UserWrapper
   - Interface
     - IUserService
   - Client
     - Implemented IUserService
+- Tests
+  - UserServiceTests
 
 Removed: The functions these files provided have all been moved into Github Workflows
 

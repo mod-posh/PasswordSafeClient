@@ -50,14 +50,14 @@ namespace ModPosh.PasswordSafeClient.Tests
         [Test]
         public async Task GetAllUsersAsync_ReturnsListOfUsers()
         {
-            // Arrange
-            var expectedUsers = new List<User>
+            // Arrange: Wrap users in the correct wrapper format
+            var expectedUserWrappers = new List<UserWrapper>
             {
-                new User { Id = 1, Username = "john", Description = "Developer" },
-                new User { Id = 2, Username = "jane", Description = "Manager" }
+                new UserWrapper { User = new User { Id = 1, Uid = "john", Login = "john", PublicKey = null } },
+                new UserWrapper { User = new User { Id = 2, Uid = "jane", Login = "jane", PublicKey = null } }
             };
 
-            var jsonResponse = JsonSerializer.Serialize(expectedUsers);
+            var jsonResponse = JsonSerializer.Serialize(expectedUserWrappers);
 
             _httpMessageHandlerMock.Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -76,19 +76,19 @@ namespace ModPosh.PasswordSafeClient.Tests
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result[0].Username, Is.EqualTo("john"));
+            Assert.That(result[0].Login, Is.EqualTo("john"));
         }
 
         [Test]
         public async Task SearchUsersAsync_ReturnsMatchingUsers()
         {
-            // Arrange
-            var expectedUsers = new List<User>
+            // Arrange: Wrap users in the correct wrapper format
+            var expectedUserWrappers = new List<UserWrapper>
             {
-                new User { Id = 1, Username = "jim", Description = "QA" }
+                new UserWrapper { User = new User { Id = 1, Uid = "jim", Login = "jim", PublicKey = null } }
             };
 
-            var jsonResponse = JsonSerializer.Serialize(expectedUsers);
+            var jsonResponse = JsonSerializer.Serialize(expectedUserWrappers);
 
             _httpMessageHandlerMock.Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -107,7 +107,7 @@ namespace ModPosh.PasswordSafeClient.Tests
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result[0].Username, Is.EqualTo("jim"));
+            Assert.That(result[0].Login, Is.EqualTo("jim"));
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace ModPosh.PasswordSafeClient.Tests
                 });
 
             // Act & Assert (No exception means success)
-            await _usersService.AddUsersAsync(TestProjectId, userRequest);  // Add await here
+            await _usersService.AddUsersAsync(TestProjectId, userRequest);
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace ModPosh.PasswordSafeClient.Tests
                 });
 
             // Act & Assert (No exception means success)
-            await _usersService.DeleteUserAsync(TestProjectId, userId);  // Add await here
+            await _usersService.DeleteUserAsync(TestProjectId, userId);
         }
 
         public void Dispose()
