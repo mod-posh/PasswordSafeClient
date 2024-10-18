@@ -130,7 +130,7 @@ namespace ModPosh.PasswordSafeClient.Tests
                 });
 
             // Act & Assert (No exception means success)
-            Assert.DoesNotThrowAsync(() => _usersService.AddUsersAsync(TestProjectId, userRequest));
+            await _usersService.AddUsersAsync(TestProjectId, userRequest);  // Add await here
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace ModPosh.PasswordSafeClient.Tests
                 });
 
             // Act & Assert (No exception means success)
-            Assert.DoesNotThrowAsync(() => _usersService.DeleteUserAsync(TestProjectId, userId));
+            await _usersService.DeleteUserAsync(TestProjectId, userId);  // Add await here
         }
 
         public void Dispose()
