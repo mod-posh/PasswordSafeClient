@@ -27,6 +27,7 @@ namespace ModPosh.PasswordSafeClient.Client
 
             // Pass the token into CredentialsService
             CredentialsService = new CredentialsService(httpClient, _authToken);
+            UsersService = new UsersService(httpClient, authToken);
         }
 
         /// <summary>

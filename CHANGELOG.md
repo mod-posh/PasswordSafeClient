@@ -16,6 +16,8 @@ Added:
     - UserRequest
   - Interface
     - IUserService
+  - Client
+    - Implemented IUserService
 
 Removed: The functions these files provided have all been moved into Github Workflows
 
