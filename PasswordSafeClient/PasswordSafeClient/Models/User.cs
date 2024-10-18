@@ -11,13 +11,18 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the username of the user.
+        /// Gets or sets the UID of the user.
         /// </summary>
-        public string? Username { get; set; }
+        public string? Uid { get; set; }
 
         /// <summary>
-        /// Gets or sets the description for the user.
+        /// Gets or sets the public key of the user.
         /// </summary>
-        public string? Description { get; set; }
+        public string? PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the login of the user.
+        /// </summary>
+        public string? Login { get; set; }
     }
 }
