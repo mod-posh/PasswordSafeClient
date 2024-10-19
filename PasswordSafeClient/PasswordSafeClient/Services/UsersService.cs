@@ -61,17 +61,17 @@ namespace ModPosh.PasswordSafeClient.Services
             return users ?? new List<User>();
         }
 
-        /// <inheritdoc />
-        public async Task<List<User>> SearchUsersAsync(int projectId, string query)
-        {
-            SetAuthHeader();
+        ///// <inheritdoc />
+        //public async Task<List<User>> SearchUsersAsync(int projectId, string query)
+        //{
+        //    SetAuthHeader();
 
-            var response = await _httpClient.GetAsync($"/projects/{projectId}/users/search?search_query={query}");
-            response.EnsureSuccessStatusCode();
+        //    var response = await _httpClient.GetAsync($"/projects/{projectId}/users/search?search_query={query}");
+        //    response.EnsureSuccessStatusCode();
 
-            var users = await response.Content.ReadFromJsonAsync<List<User>>();
-            return users ?? new List<User>();
-        }
+        //    var users = await response.Content.ReadFromJsonAsync<List<User>>();
+        //    return users ?? new List<User>();
+        //}
 
         /// <inheritdoc />
         public async Task AddUsersAsync(int projectId, UserRequest userRequest)

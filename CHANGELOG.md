@@ -32,6 +32,11 @@ Removed: The functions these files provided have all been moved into Github Work
   - nuget.config
   - psakefile.ps1
 
+Bugs:
+
+- issue-14: Null Response, Added UserWrapper
+- issue-15: User Search, feature not implemented in API
+
 ---
 
 ## [[1.0.0]](https://github.com/mod-posh/PasswordSafeClient/releases/tag/v1.0.0) - 2024-10-16

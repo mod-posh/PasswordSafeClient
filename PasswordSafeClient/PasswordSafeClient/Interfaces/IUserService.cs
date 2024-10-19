@@ -22,7 +22,7 @@ namespace ModPosh.PasswordSafeClient.Interfaces
         /// <param name="projectId">The project ID.</param>
         /// <param name="query">The search query string.</param>
         /// <returns>A list of users matching the search query.</returns>
-        Task<List<User>> SearchUsersAsync(int projectId, string query);
+        //Task<List<User>> SearchUsersAsync(int projectId, string query);
 
         /// <summary>
         /// Adds users to a specific project.

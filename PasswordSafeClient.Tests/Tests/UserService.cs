@@ -52,10 +52,10 @@ namespace ModPosh.PasswordSafeClient.Tests
         {
             // Arrange: Wrap users in the correct wrapper format
             var expectedUserWrappers = new List<UserWrapper>
-            {
-                new UserWrapper { User = new User { Id = 1, Uid = "john", Login = "john", PublicKey = null } },
-                new UserWrapper { User = new User { Id = 2, Uid = "jane", Login = "jane", PublicKey = null } }
-            };
+    {
+        new UserWrapper { User = new User { Id = 1, Uid = "john", Login = "john", PublicKey = null } },
+        new UserWrapper { User = new User { Id = 2, Uid = "jane", Login = "jane", PublicKey = null } }
+    };
 
             var jsonResponse = JsonSerializer.Serialize(expectedUserWrappers);
 
@@ -79,36 +79,36 @@ namespace ModPosh.PasswordSafeClient.Tests
             Assert.That(result[0].Login, Is.EqualTo("john"));
         }
 
-        [Test]
-        public async Task SearchUsersAsync_ReturnsMatchingUsers()
-        {
-            // Arrange: Wrap users in the correct wrapper format
-            var expectedUserWrappers = new List<UserWrapper>
-            {
-                new UserWrapper { User = new User { Id = 1, Uid = "jim", Login = "jim", PublicKey = null } }
-            };
+        //[Test]
+        //public async Task SearchUsersAsync_ReturnsMatchingUsers()
+        //{
+        //    // Arrange: Wrap users in the correct wrapper format
+        //    var expectedUserWrappers = new List<UserWrapper>
+        //    {
+        //        new UserWrapper { User = new User { Id = 1, Uid = "jim", Login = "jim", PublicKey = null } }
+        //    };
 
-            var jsonResponse = JsonSerializer.Serialize(expectedUserWrappers);
+        //    var jsonResponse = JsonSerializer.Serialize(expectedUserWrappers);
 
-            _httpMessageHandlerMock.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(jsonResponse)
-                });
+        //    _httpMessageHandlerMock.Protected()
+        //        .Setup<Task<HttpResponseMessage>>(
+        //            "SendAsync",
+        //            ItExpr.IsAny<HttpRequestMessage>(),
+        //            ItExpr.IsAny<CancellationToken>())
+        //        .ReturnsAsync(new HttpResponseMessage
+        //        {
+        //            StatusCode = HttpStatusCode.OK,
+        //            Content = new StringContent(jsonResponse)
+        //        });
 
-            // Act
-            var result = await _usersService.SearchUsersAsync(TestProjectId, "jim");
+        //    // Act
+        //    var result = await _usersService.SearchUsersAsync(TestProjectId, "jim");
 
-            // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result[0].Login, Is.EqualTo("jim"));
-        }
+        //    // Assert
+        //    Assert.That(result, Is.Not.Null);
+        //    Assert.That(result.Count, Is.EqualTo(1));
+        //    Assert.That(result[0].Login, Is.EqualTo("jim"));  // Assert on the correct field
+        //}
 
         [Test]
         public async Task AddUsersAsync_SuccessfullyAddsUsers()
