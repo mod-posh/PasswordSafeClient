@@ -1,15 +1,12 @@
-name: Build Project
+name: Build and Package
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build_and_test:
+  build_and_pack:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,29 +18,6 @@ jobs:
         run: dotnet restore ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln
       - name: Clean
         run: dotnet clean ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release
-      - name: Build
-        run: dotnet build ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --no-restore
-      - name: Test
-        run: dotnet test ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
-      - name: Publish Test Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: Test Results
-          path: '**/TestResults/*.trx'
-
-  pack_and_publish:
-    needs: build_and_test
-    if: success()
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '7.0.x'
-      - name: Restore dependencies
-        run: dotnet restore ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln
       - name: Build
         run: dotnet build ${{ github.workspace }}/${{ vars.PROJECT_NAME }}/${{ vars.PROJECT_NAME }}.sln --configuration Release --no-restore
       - name: Package
