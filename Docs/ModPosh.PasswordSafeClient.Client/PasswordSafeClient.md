@@ -12,6 +12,7 @@ public class PasswordSafeClient : IPasswordSafeClient
 | --- | --- |
 | [PasswordSafeClient](PasswordSafeClient/PasswordSafeClient.md)(…) | Initializes a new instance of the [`PasswordSafeClient`](./PasswordSafeClient.md) class. |
 | [CredentialsService](PasswordSafeClient/CredentialsService.md) { get; } |  |
+| [UsersService](PasswordSafeClient/UsersService.md) { get; } |  |
 | [UpdateAuthToken](PasswordSafeClient/UpdateAuthToken.md)(…) | Updates the auth token used by the client. |
 
 ## Private Members
